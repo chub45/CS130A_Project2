@@ -31,23 +31,23 @@ void rangeSearch(std::string minValue, std::string maxValue){
 ~AVL();
 
 private:
-Node * root;
+Node* root;
 
 //helper methods
-bool searchHelper(Node* root, std::string value);
-Node* insertHelper(Node* root, std::string value);
-Node* removeHelper(Node* root, std::string value);
-void removeNode(Node* root);
+bool searchHelper(Node*& root, std::string value);
+Node* insertHelper(Node*& root, std::string value);
+Node* removeHelper(Node*& root, std::string value);
+void removeNode(Node*& root);
 void findMinHelper(Node* root, std::string value);
 void sortHelper(Node* root, std::ofstream &myfile);
-void rangeSearchHelper(Node* root, std::string minValue, std::string maxValue);
-
+void rangeSearchHelper(Node* root, std::string &minValue, std::string &maxValue);
+void Delete(Node*& root);
 //rotate methods
 Node* rotateRight(Node* root);
 Node* rotateLeft(Node* root);
 
 //find higher height method
-int max(Node* left, Node* right);
+int max(int left, int right);
 int height(Node* root);
 };
 #endif
