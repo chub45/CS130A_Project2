@@ -34,20 +34,20 @@ private:
 Node* root;
 
 //helper methods
-bool searchHelper(Node*& root, std::string value);
-Node* insertHelper(Node*& root, std::string value);
-Node* removeHelper(Node*& root, std::string value);
-void removeNode(Node*& root);
-void findMinHelper(Node* root, std::string value);
-void sortHelper(Node* root, std::ofstream &myfile);
-void rangeSearchHelper(Node* root, std::string &minValue, std::string &maxValue);
+bool searchHelper(Node* node, std::string value);
+Node* insertHelper(Node*& node, std::string value);
+Node* removeHelper(Node*& node, std::string value);
+void removeNode(Node*& node);
+void findMinHelper(Node* node, std::string& value);
+void sortHelper(Node* rooto, std::ofstream &myfile);
+void rangeSearchHelper(Node* node, std::string &minValue, std::string &maxValue);
 void Delete(Node*& root);
 //rotate methods
-Node* rotateRight(Node* root);
-Node* rotateLeft(Node* root);
+Node* rotateRight(Node*& node);
+Node* rotateLeft(Node*& node);
 
 //find higher height method
-int max(int left, int right);
-int height(Node* root);
+int max(Node*& left, Node*& right);
+int height(Node* node);
 };
 #endif

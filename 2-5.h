@@ -18,7 +18,7 @@ struct Node{
 struct TwoFiveNode{
     //an array of Nodes for 2-5
     Node** keys;
-    //minimum degree (t)
+    //lowest number of keys available (t)
     int degree; 
     //array of pointers for children of this node
     TwoFiveNode** children;

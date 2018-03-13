@@ -1,9 +1,9 @@
 //Implementation for AVL Tree
 
-#include "avl.h"
 #include <fstream>
 #include <cassert>
 #include <iostream>
+#include "avl.h"
 
 
 using namespace std;
@@ -12,16 +12,17 @@ using namespace std;
 AVL::AVL(){
     root = NULL;
 }
+
 //search
-bool AVL::searchHelper(Node*& root, string value){
-    if(root == NULL){
+bool AVL::searchHelper(Node* node, string value){
+    if(node == NULL){
         return false;
     }
-    else if(root->word > value){
-        return searchHelper(root->left, value);
+    else if(node->word > value){
+        return searchHelper(node->left, value);
     }
-    else if(root->word < value){
-        return searchHelper(root->right, value);
+    else if(node->word < value){
+        return searchHelper(node->right, value);
     }
     else{
         return true;
@@ -29,141 +30,138 @@ bool AVL::searchHelper(Node*& root, string value){
 }
 
 //insert
-AVL::Node* AVL::insertHelper(Node*& root, string value){
-    if(root == NULL){
-        root = new Node();
-        root->word = value;
-        root->count = 1;
-        root->height = 1;
-        root->left = NULL;
-        root->right = NULL;
-        return root;
+AVL::Node* AVL::insertHelper(Node*& node, string value){
+    if(node == NULL){
+        node = new Node();
+        node->word = value;
+        node->count = 1;
+        node->left = NULL;
+        node->right = NULL;
+        node->height = 1;
+        return node;
     }
-    if(root->word > value){
-        root->left = insertHelper(root->left, value);
+    else if(node->word == value){
+        node->count++;
+        return node;
     }
-    else if(root->word < value){
-        root->right = insertHelper(root->right, value);
+    else if(node->word > value){
+        node->left = insertHelper(node->left, value);
     }
     else{
-        //word is equal to value (already in tree)
-        root->count++;
-        return root;
+        node->right = insertHelper(node->right, value);
     }
     //Checking height and rebalancing now
-    root->height = 1 + max(height(root->left), height(root->right));
-    int heightCheck;
-    if(root->left == NULL && root->right == NULL){
-    }
-    else if(root->left == NULL){
-        heightCheck = 0 - height(root->right);
-    }
-    else if(root->right == NULL){
-        heightCheck = height(root->left) - 0;
-    }
-    else{
-        heightCheck = height(root->left) - height(root->right);
-    }
+    int heightCheck = height(node->left) - height(node->right);
     if(heightCheck > 1){
         //left-left case
-        if(value < root->left->word){
-            return rotateRight(root);
+        if(height(node->left->left) >= height(node->left->right)){
+            return rotateRight(node);
         }
         //left-right case
         else{
-            root->left = rotateLeft(root->left);
-            return rotateRight(root);
+            node->left = rotateLeft(node->left);
+            return rotateRight(node);
         }
     }
     else if(heightCheck < -1){
         //right-right case
-        if(value > root->right->word){
-            return rotateLeft(root);
+        if(height(node->right->right) >= height(node->right->left)){
+            return rotateLeft(node);
         }
         //right-left case
         else{
-            root->right = rotateRight(root->right);
-            return rotateLeft(root);
+            node->right = rotateRight(node->right);
+            return rotateLeft(node);
         }
     }
     //update height after rebalance
-    return root;
+    node->height = 1 + max(node->left, node->right);
+    return node;
 }
 
 //remove
-AVL::Node* AVL::removeHelper(Node*& root, string value){
-    if(root == NULL){
-        return root;
+AVL::Node* AVL::removeHelper(Node*& node, string value){
+    if(node == NULL){
+        return node;
     }
-    else if(root->word > value){
-        root->left = removeHelper(root->left, value);
+    else if(node->word > value){
+        node->left = removeHelper(node->left, value);
     }
-    else if(root->word < value){
-        root->right = removeHelper(root->right, value);
+    else if(node->word < value){
+        node->right = removeHelper(node->right, value);
     }
     else{
-        if(root->count > 1){
-            root->count--;
-            return root;
+        if(node->count > 1){
+            node->count--;
+            return node;
         }
+        //must delete entire node
         else{
-            removeNode(root);
+            removeNode(node);
         }
     }
-    root->height = 1 + max(height(root->left), height(root->right));
-
+    if(node == NULL){
+        return node;
+    }
     //rebalancing tree
-    int heightCheck = height(root->left) - height(root->right);
+    int heightCheck = (height(node->left) - height(node->right));
     if(heightCheck > 1){
         //left-left case
-        if(height(root->left->left) > height(root->left->right)){
-            return rotateRight(root);
+        if(height(node->left->left) > height(node->left->right)){
+            return rotateRight(node);
         }
-        //left-right case
+        //left-right case`
         else{
-            root->left = rotateLeft(root->left);
-            return rotateRight(root);
+            node->left = rotateLeft(node->left);
+            return rotateRight(node);
         }
     }
     else if(heightCheck < -1){
         //right-right case
-        if(height(root->right->right) > height(root->right->left)){
-            return rotateLeft(root);
+        if(height(node->right->right) > height(node->right->left)){
+            return rotateLeft(node);
         }
         //right-left case
         else{
-            root->right = rotateRight(root->right);
-            return rotateLeft(root);
+            node->right = rotateRight(node->right);
+            return rotateLeft(node);
         }
     }
-    return root;
+    //update height after rebalance
+    node->height = 1 +  max(node->left, node->right);
+    return node;
 }
 
-void AVL::removeNode(Node*& root){
+void AVL::removeNode(Node*& node){
     string value;
-    Node* temp = root;
-    if(root->left == NULL){
-        root = root->right;
+    Node* temp = node;
+    //leaf
+    if(node->left == NULL && node->right == NULL){
+        delete temp;
+        node = NULL;
+    }
+    else if(node->left == NULL){
+        node = node->right;
         delete temp;
     }
-    else if(root->right == NULL){
-        root = root->left;
+    else if(node->right == NULL){
+        node = node->left;
         delete temp;
     }
+    //has two children
     else{
-        findMinHelper(root->right, value);
-        root->word = value;
-        removeHelper(root->right, value);
+        findMinHelper(node->right, value);
+        node->word = value;
+        node->right = removeHelper(node->right, value);
     }
 }
 
-void AVL::findMinHelper(Node* root, string value){
-    while(root->left != NULL){
-        root = root->left;
+void AVL::findMinHelper(Node* node, string& value){
+    while(node->left != NULL){
+        node = node->left;
     }
-    value = root->word;
+    value = node->word;
 }
-
 //sort
 void AVL::sort(){
     ofstream myfile;
@@ -182,53 +180,71 @@ void AVL::sortHelper(Node* root, ofstream &myfile){
 }
 
 //range search
-void AVL::rangeSearchHelper(Node* root, string &minValue, string &maxValue){
-    if(root == NULL){
+void AVL::rangeSearchHelper(Node* node, string& minValue, string& maxValue){
+    if(node == NULL){
         return;
     }
-    if(minValue < root->word){
-        rangeSearchHelper(root->left, minValue, maxValue);
+    if(node->word > minValue){
+        rangeSearchHelper(node->left, minValue, maxValue);
     }
-    if(minValue < root->word && maxValue > root->word){
-        cout << root->word << endl;
+    if(node->word > minValue && node->word < maxValue){
+        cout << node->word << endl;
     }
-    if(maxValue > root->word){
-        rangeSearchHelper(root->right, minValue, maxValue);
+    if(node->word < maxValue){
+        rangeSearchHelper(node->right, minValue, maxValue);
     }
 }
 //rotate methods, returns new root after rotation
-AVL::Node* AVL::rotateRight(Node* root){
-    Node* temp = root->left;
-    Node* secondTemp = temp->right;
-    temp->right = root;
-    root->left = secondTemp;
-    root->height = max(height(root->left), height(root->right)) + 1;
-    temp->height = max(height(temp->left), height(temp->right)) + 1;
+AVL::Node* AVL::rotateRight(Node*& node){
+    Node* temp = node->left;
+    node->left = temp->right;
+    temp->right = node;
+    node->height = 1 + max(node->left, node->right);
+    temp->height = 1 + max(temp->left, temp->right);
+    if(node == root){
+        root = temp;
+    }
     return temp;
 }
 
-AVL::Node* AVL::rotateLeft(Node* root){
-    Node* temp = root->right;
-    Node* secondTemp = temp->left;
-    temp->left = root;
-    root->right = secondTemp;
-    root->height = max(height(root->left), height(root->right)) + 1;
-    temp->height = max(height(temp->left), height(temp->right)) + 1;
+AVL::Node* AVL::rotateLeft(Node*& node){
+    Node* temp = node->right;
+    node->right = temp->left;
+    temp->left = node;
+    node->height = 1 + max(node->left, node->right);
+    temp->height = 1 + max(temp->left, temp->right);
+    if(node == root){
+        root = temp;
+    }
     return temp;
 }
 //height methods
-int AVL::max(int left, int right){
-    if(left > right){
-        return left;
+int AVL::max(Node*& left, Node*& right){
+    if(left != NULL && right != NULL){
+        if(left->height > right->height){
+            return left->height;
+        }
+        else if(left->height < right->height){
+            return right->height;
+        }
+        else{
+            return left->height;
+        }
+    }
+    else if(left == NULL && right == NULL){
+        return 0;
+    }
+    else if(left != NULL && right == NULL){
+        return left->height;
     }
     else{
-        return right;
+        return right->height;
     }
 }
 
-int AVL::height(Node* root){
-    if(root != NULL){
-        return root->height;
+int AVL::height(Node* node){
+    if(node != NULL){
+        return node->height;
     }
     else{
         return 0;
