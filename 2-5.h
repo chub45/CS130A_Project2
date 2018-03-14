@@ -32,35 +32,28 @@ public:
 TwoFiveTree();
 
 //methods
-bool search(std::string value){ return searchHelper(root, value);}
-void insert(std::string value){ insertHelper(root, value);}
-void remove(std::string value){ removeHelper(root, value);}
+bool search(std::string value){ return searchHelper(node, value);}
+void insert(std::string value){ insertHelper(node, value);}
+void remove(std::string value){ removeHelper(node, value);}
 void sort();
 void rangeSearch(std::string minValue, std::string maxValue){ 
-    rangeSearchHelper(root, minValue, maxValue);}
+    rangeSearchHelper(node, minValue, maxValue);}
 //destructor
 ~TwoFiveTree();
 
 private:
-TwoFiveNode* root;
-Node* tracker;
+TwoFiveNode* node;
 
 //helper methods
 //void makeTwoFive(TwoFiveNode* root, int degree, bool leaf);
-void insertVacant(TwoFiveNode* root, std::string value);
-void splitChild(TwoFiveNode* newRoot, int index, TwoFiveNode* root);
+void insertVacant(TwoFiveNode*& root, std::string value);
+void splitChild(TwoFiveNode*& newRoot, int index, TwoFiveNode*& root);
 bool searchHelper(TwoFiveNode* root, std::string value);
-void insertHelper(TwoFiveNode* root, std::string value);
-Node* removeHelper(TwoFiveNode* root, std::string value);
+void insertHelper(TwoFiveNode*& root, std::string value);
+Node* removeHelper(TwoFiveNode*& root, std::string value);
 void sortHelper(TwoFiveNode* root, std::ofstream &myfile);
 void rangeSearchHelper(TwoFiveNode* root, std::string value1, std::string value2);
-void Delete(TwoFiveNode* root);
-//rotate methods
-Node* rotateRight(Node* root);
-Node* rotateLeft(Node* root);
+void Delete(TwoFiveNode*& root);
 
-//find higher height method
-int max(Node* left, Node* right);
-int height(Node* root);
 };
 #endif

@@ -13,7 +13,7 @@ namespace fs = std::experimental::filesystem;
 int main(){
     vector <string> store;
     string str;
-    store.push_back("cat");
+    /*store.push_back("cat");
     store.push_back("dog");
     store.push_back("a");
     store.push_back("ree");
@@ -21,8 +21,8 @@ int main(){
     store.push_back("reee");
     store.push_back("ree");
     store.push_back("reee");
-    store.push_back("zipp");
-    /*for(auto& p: fs::recursive_directory_iterator("hotelssmall")){
+    store.push_back("zipp");*/
+    for(auto& p: fs::recursive_directory_iterator("hotelssmall")){
         if(is_regular_file(status(p))){
             ifstream inFile(p.path());
             if(!inFile){
@@ -52,7 +52,7 @@ int main(){
             }
             inFile.close();
         }
-    }*/
+    }
     
     //Begin construction of AVL and 2-5
     AVL testAVL;
@@ -81,16 +81,11 @@ int main(){
             testTwoFive.search(input);
             int stop_h = clock();
            // if(testAVL.search(input) == testTwoFive.search(input)){
-            cout << boolalpha << testAVL.search(input) << endl;
+            cout << boolalpha << testTwoFive.search(input) << endl;
             cout << "AVL: " << (stop_b - start_b)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << "2-5: " << (stop_h - start_h)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << endl;
            // }
-           // else{
-                cout << "AVL:" << boolalpha << testAVL.search(input) << endl;
-         //       cout << "2-5:" << boolalpha << testTwoFive.search(input) << endl;
-
-          //  }
     }
             break;
             //perform insert function
@@ -119,7 +114,7 @@ int main(){
          //   testHTable.remove(input3);
             int stop3_h = clock();
             cout << "AVL: " << (stop3_b - start3_b)/double(CLOCKS_PER_SEC) << "s" << endl;
-       //     cout << "2-5: " << (stop3_h - start3_h)/double(CLOCKS_PER_SEC) << "s" << endl;
+            cout << "2-5: " << (stop3_h - start3_h)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << endl;
             break;
     }
@@ -148,7 +143,7 @@ int main(){
             int start5_h = clock();
             testTwoFive.rangeSearch(rangeMin, rangeMax);
             int stop5_h = clock();
-
+            
             cout << "AVL: " << (stop5_b - start5_b)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << "TwoFive: " << (stop5_h - start5_h)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << endl;
