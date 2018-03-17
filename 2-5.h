@@ -43,16 +43,20 @@ void rangeSearch(std::string minValue, std::string maxValue){
 
 private:
 TwoFiveNode* node;
-
 //helper methods
 //void makeTwoFive(TwoFiveNode* root, int degree, bool leaf);
 void insertVacant(TwoFiveNode*& root, std::string value);
 void splitChild(TwoFiveNode*& newRoot, int index, TwoFiveNode*& root);
-bool searchHelper(TwoFiveNode* root, std::string value);
+bool searchHelper(TwoFiveNode*& root, std::string value);
 void insertHelper(TwoFiveNode*& root, std::string value);
-Node* removeHelper(TwoFiveNode*& root, std::string value);
+void removeHelper(TwoFiveNode*& root, std::string value);
+void removeNonLeaf(TwoFiveNode* root, int index);
+Node* findMinHelper(TwoFiveNode* root, int index);
+Node* findMaxHelper(TwoFiveNode* root, int index);
+void swap(TwoFiveNode* root, int index);
+void mergeChild(TwoFiveNode* root, int index);
 void sortHelper(TwoFiveNode* root, std::ofstream &myfile);
-void rangeSearchHelper(TwoFiveNode* root, std::string value1, std::string value2);
+void rangeSearchHelper(TwoFiveNode*& root, std::string value1, std::string value2);
 void Delete(TwoFiveNode*& root);
 
 };
