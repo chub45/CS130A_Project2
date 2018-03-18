@@ -45,13 +45,14 @@ bool TwoFiveTree::searchHelper(TwoFiveNode*& root, string value){
         while(store < root->keySize && root->keys[store]->word < value){
             store++;
         }
-        if(root->keySize == 1){
-            if(root->keys[0]->word == value && !root->isLeaf){
-                return true;
+        if(root->keySize == store){
+            for(int i = 0; i < root->keySize; i++){
+                if(root->keys[i]->word == value){
+                    return true;
+                }
             }
-            else{
-                return searchHelper(root->children[0], value);
-            }
+            if(root->isLeaf == false)
+            return searchHelper(root->children[store], value);
         }
         else if(root->keys[store]->word == value){
             return true;
@@ -60,7 +61,6 @@ bool TwoFiveTree::searchHelper(TwoFiveNode*& root, string value){
             return false;
         }
    }
-       if(store < root->keySize + 1)
        return searchHelper(root->children[store], value);
 }
 //insert method
@@ -78,6 +78,12 @@ void TwoFiveTree::insertHelper(TwoFiveNode*& root, string value){
         root->keys[0]->count = 1;
     }
     else{
+        for(int i = 0; i < root->keySize; i++){
+            if(root->keys[i]->word == value){
+                root->keys[i]->count++;
+                return;
+            }
+        }
         //if current node is full
          if(root->keySize == (2 * root->degree)){
             //create new root
@@ -139,6 +145,12 @@ void TwoFiveTree::insertVacant(TwoFiveNode*& root, string value){
         } //check if child is full
         if(root->children[i + 1]->keySize == 4){
             splitChild(root, i + 1 , root->children[i + 1]);
+            for(int i = 0; i < root->keySize; i++){
+                if(root->keys[i]->word == value){
+                    root->keys[i]->count++;
+                    return;
+                }
+            }
             if(root->keys[i + 1]->word < value){
                 i++;
             }
@@ -192,29 +204,14 @@ void TwoFiveTree::removeHelper(TwoFiveNode*& root, string value){
     if(root == NULL){
         return;
     }
-    else if(node == NULL){
-        return;
-    }
-    else if(node->isLeaf == true){
-        if(node->keySize == 1){
-            delete node->keys[0];
-            return;
-        }
-    }
     //check to see if value is in current node
-    while(i < root->keySize && root->keys[i]->word < value){
+    while(i < root->keySize - 1 && root->keys[i]->word < value){
      i++;
     }
-    if(root->keySize == 1){
-        if(root->keys[0]->word != value && !root->isLeaf){
-            removeHelper(root->children[i], value);
-        }
-        else if(root->keys[0]->word == value && !root->isLeaf){
-            removeNonLeaf(root, 0);
-        }
-        else if(root->isLeaf == true){
-            delete root->keys[0];
-        }
+    cout << "Value of i: " << i << endl;
+    if(root->keySize == i && root->isLeaf == false){
+        removeHelper(root->children[i], value);
+        return;
     }
     else if(root->keys[i]->word == value){
         if(root->isLeaf == true){
@@ -245,8 +242,10 @@ void TwoFiveTree::removeHelper(TwoFiveNode*& root, string value){
     else{ 
         if(root->isLeaf == true){
         //value not found at leaf level, so not found
+            cout << "Value " << value << " not found" << endl;
             return;
         }
+        cout << " This runs " << endl;
         bool checkMerge = false;
         //child has value that we want to delete
         if(i == root->keySize){
@@ -254,15 +253,16 @@ void TwoFiveTree::removeHelper(TwoFiveNode*& root, string value){
         }
         //perform a swap with siblings if only has one element
         if(root->children[i]->keySize < root->degree){
+            cout << "swap runs" << endl;
             swap(root, i);        
         }
 
         //check to see if merge was resulted from above if statement
         if(checkMerge){
-            removeHelper(root->children[0], value);
+            removeHelper(root->children[i - 1], value);
         }
         else{
-            removeHelper(root->children[i + 1], value);
+            removeHelper(root->children[i], value);
         }
     }
     return;
