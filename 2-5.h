@@ -1,4 +1,4 @@
-//Header file for the AVL Tree
+//Header file for the 2-5 Tree
 #ifndef TWO_FIVE_TREE
 #define TWO_FIVE_TREE
 
@@ -44,7 +44,6 @@ void rangeSearch(std::string minValue, std::string maxValue){
 private:
 TwoFiveNode* node;
 //helper methods
-//void makeTwoFive(TwoFiveNode* root, int degree, bool leaf);
 void insertVacant(TwoFiveNode*& root, std::string value);
 void splitChild(TwoFiveNode*& newRoot, int index, TwoFiveNode*& root);
 bool searchHelper(TwoFiveNode*& root, std::string value);

@@ -1,4 +1,4 @@
-//Implementation for 2-4 Tree
+//Implementation for 2-5 Tree
 
 #include "2-5.h"
 #include <fstream>
@@ -199,16 +199,15 @@ void TwoFiveTree::splitChild(TwoFiveNode*& newRoot, int index, TwoFiveNode*& roo
 
 //delete/remove method
 void TwoFiveTree::removeHelper(TwoFiveNode*& root, string value){
-    int i = 0;
+     int i = 0;
     //cases for each delete scenario
     if(root == NULL){
         return;
     }
     //check to see if value is in current node
-    while(i < root->keySize - 1 && root->keys[i]->word < value){
+    while(i < root->keySize && root->keys[i]->word < value){
      i++;
     }
-    cout << "Value of i: " << i << endl;
     if(root->keySize == i && root->isLeaf == false){
         removeHelper(root->children[i], value);
         return;
@@ -242,10 +241,9 @@ void TwoFiveTree::removeHelper(TwoFiveNode*& root, string value){
     else{ 
         if(root->isLeaf == true){
         //value not found at leaf level, so not found
-            cout << "Value " << value << " not found" << endl;
+         //   cout << "Value " << value << " not found" << endl;
             return;
         }
-        cout << " This runs " << endl;
         bool checkMerge = false;
         //child has value that we want to delete
         if(i == root->keySize){
@@ -253,7 +251,6 @@ void TwoFiveTree::removeHelper(TwoFiveNode*& root, string value){
         }
         //perform a swap with siblings if only has one element
         if(root->children[i]->keySize < root->degree){
-            cout << "swap runs" << endl;
             swap(root, i);        
         }
 
@@ -384,10 +381,10 @@ void TwoFiveTree::swap(TwoFiveNode* root, int index){
     else{
         //merge last child with left child
         if(index == root->keySize){
-            mergeChild(root, index);
+            mergeChild(root, index - 1);
         }
         else{//merge child with right child
-            mergeChild(root, index + 1);
+            mergeChild(root, index);
         }
     }
     

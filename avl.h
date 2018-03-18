@@ -32,7 +32,6 @@ void rangeSearch(std::string minValue, std::string maxValue){
 
 private:
 Node* root;
-int size = 0;
 //helper methods
 bool searchHelper(Node* node, std::string value);
 Node* insertHelper(Node*& node, std::string value);

@@ -1,4 +1,4 @@
-//File that reads input and compares the running times of BST and Hash Tables
+//File that reads input and compares the running times of AVL Tree and 2-5 Tree
 //Benson Chu
 #include "avl.h"
 #include "2-5.h"
@@ -14,6 +14,27 @@ int main(){
     vector <string> store;
     string str;
     int size = 0;
+/*    store.push_back("cat");
+    store.push_back("dog");
+    store.push_back("lol");
+    store.push_back("caat");
+    store.push_back("doog");
+    store.push_back("dtog");
+    store.push_back("lool"); 
+    store.push_back("coat");
+    store.push_back("doog");
+    store.push_back("liol");
+    store.push_back("coat");
+    store.push_back("diog");
+    store.push_back("lol");  
+    store.push_back("cat");
+    store.push_back("doog");
+    store.push_back("lol");
+    store.push_back("cuat");
+    store.push_back("dtog");
+    store.push_back("leol"); 
+    store.push_back("dutog");
+*/
     for(auto& p: fs::recursive_directory_iterator("hotelssmall")){
         if(is_regular_file(status(p))){
             ifstream inFile(p.path());
@@ -46,12 +67,13 @@ int main(){
             inFile.close();
         }
     }
+
     
     //Begin construction of AVL and 2-5
     AVL testAVL;
     TwoFiveTree testTwoFive;
     string input = "";
-    cout << size << " words inserted" << endl;
+    //cout << size << " words inserted" << endl;
     //Inserting each word into both AVL and TwoFive
     for(unsigned int i = 0; i < store.size(); i++){
         testAVL.insert(store[i]);
@@ -89,19 +111,19 @@ int main(){
             break;
             //perform insert function
     case 2: 
-    {      // string input2;
-           // cin >> input2;
+    {       string input2;
+            cin >> input2;
             int start2_b = clock();
-            for(int i = 0; i < 100; i++){
-            //testAVL.insert(input2);
-            testAVL.insert(store[i]);
-            }
+           // for(int i = 0; i < 100; i++){
+            testAVL.insert(input2);
+            //testAVL.insert(store[i]);
+            //}
             int stop2_b = clock();
             int start2_h = clock();
-            for(int i = 0; i < 100; i++){
-            //testTwoFive.insert(input2);
-            testTwoFive.insert(store[i]);
-            }
+            //for(int i = 0; i < 100; i++){
+            testTwoFive.insert(input2);
+            //testTwoFive.insert(store[i]);
+            //}
             int stop2_h = clock();
             cout << "AVL: " << (stop2_b - start2_b)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << "2-5: " << (stop2_h - start2_h)/double(CLOCKS_PER_SEC) << "s" << endl;
@@ -110,19 +132,19 @@ int main(){
     }
             //perform delete function
     case 3: 
-    {       //string input3 = "";
-            //cin >> input3;
+    {       string input3 = "";
+            cin >> input3;
             int start3_b = clock();
-            for(unsigned int i = 0; i < 100; i++){
-            //testAVL.remove(input3);
-                testAVL.remove(store[i]);
-            }
+            //for(unsigned int i = 0; i < 100; i++){
+            testAVL.remove(input3);
+               // testAVL.remove(store[i]);
+            //}
             int stop3_b = clock();
             int start3_h = clock();
-            for(unsigned int i = 0; i < 100; i++){
-            //testTwoFive.remove(input3);
-                testTwoFive.remove(store[i]);
-            }
+            //for(unsigned int i = 0; i < 100; i++){
+            testTwoFive.remove(input3);
+                //testTwoFive.remove(store[i]);
+            //}
             int stop3_h = clock();
             cout << "AVL: " << (stop3_b - start3_b)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << "2-5: " << (stop3_h - start3_h)/double(CLOCKS_PER_SEC) << "s" << endl;
